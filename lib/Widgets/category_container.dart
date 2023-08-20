@@ -13,7 +13,7 @@ class CategoryContainer extends StatelessWidget {
 
   List quizName = ["Sport Test", "History Test", "General Test"];
   List quizColor = [const Color.fromARGB(255, 189, 150, 197),
-    Color.fromARGB(255, 163, 140, 162),
+    const Color.fromARGB(255, 163, 140, 162),
     const Color.fromARGB(255, 224, 200, 238)
   ];
 

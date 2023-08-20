@@ -52,7 +52,7 @@ class OpeningScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const login_screen(),
+                        builder: (BuildContext context) =>  login_screen(),
                       ),
                     );
                   },
