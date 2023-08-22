@@ -1,18 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:screen/Widgets/choices.dart';
+import 'package:screen/Global/Quiz_data.dart';
+import 'package:screen/Screens/Score_screen.dart';
 
-import '../Widgets/AppBar_content.dart';
+class QuizScreen extends StatefulWidget {
+  final Map categoryMap;
+  QuizScreen({super.key, required this.categoryMap});
 
-class QuizScreen extends StatelessWidget {
-  const QuizScreen({super.key});
+  @override
+  State<QuizScreen> createState() => _QuizScreenState();
+}
+
+class _QuizScreenState extends State<QuizScreen> {
+  int index = 0;
+  int score = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 163, 140, 162),
-        flexibleSpace: const content(),
+        backgroundColor: widget.categoryMap["color"],
+        leading: Center(
+          child: Text(
+            "${index + 1} / ${(widget.categoryMap["data"] as List).length}",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        centerTitle: true,
+        title: Text(
+          widget.categoryMap['Category'],
+          style: GoogleFonts.barriecito(
+            color: Colors.white,
+            fontSize: 15,
+          ),
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsetsDirectional.only(end: 13),
+            child: Icon(
+              Icons.access_time,
+              size: 30,
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -20,31 +50,31 @@ class QuizScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: MediaQuery.of(context).size.height / 5,
-              width: MediaQuery.of(context).size.width *1,
+              //height: MediaQuery.of(context).size.height / 4,
+              width: MediaQuery.of(context).size.width * 1,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 224, 200, 238),
+                color: widget.categoryMap["color"],
                 borderRadius: BorderRadius.circular(70),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
               ),
               child: Column(
                 children: [
                   Text(
-                    'Question 1',
+                    'Question ${index + 1}',
                     style: GoogleFonts.pacifico(
                         color: Colors.black,
                         decoration: TextDecoration.underline,
                         fontSize: 28),
                   ),
                   Text(
-                    'What is the capital of France?',
+                    widget.categoryMap["data"][index]["question"],
                     style:
                         GoogleFonts.pacifico(color: Colors.black, fontSize: 25),
                   )
@@ -58,10 +88,48 @@ class QuizScreen extends StatelessWidget {
               'Choices is :',
               style: GoogleFonts.pacifico(color: Colors.black, fontSize: 22),
             ),
-            for (int i = 0; i < 4; i++)
-                  //reusable Widget i created in Widget folder
-                    choices(index: i
+            //_____________________________________
+            for (int i = 0;
+                i <
+                    (widget.categoryMap["data"][index]["answers"] as List)
+                        .length;
+                i++)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: widget.categoryMap["color"],
+                    elevation: 10,
+                  ),
+                  onPressed: () {
+
+                    score += widget.categoryMap["data"][index]["answers"][i]["Score"] as int;
+
+                    if (index + 1 <
+                        (widget.categoryMap["data"] as List).length) {
+                      setState(() {
+                        
+                        index++;
+                      });
+                    } else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) =>
+                              Score_screen(score: score, totalNumOfQuestions: index + 1 ,),
+                        ),
+                      );
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      widget.categoryMap['data'][index]["answers"][i]["ans"],
+                      style: GoogleFonts.pacifico(
+                          fontSize: 20, color: Colors.black),
                     ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

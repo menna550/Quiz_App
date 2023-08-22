@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../Global/Quiz_data.dart';
 import 'Category_Screen.dart';
 
 class login_screen extends StatelessWidget {
+
+
   login_screen({super.key});
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
@@ -13,29 +16,26 @@ class login_screen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 21, 211, 11),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
+          
           Image.asset(
             "images/pngwing.com.png",
             height: MediaQuery.of(context).size.height * 0.2,
           ),
           Container(
             // height:MediaQuery.of(context).size.height* 2/3 ,
-            
             decoration: BoxDecoration(
-              
-              color: Color.fromARGB(219, 231, 255, 224),
-              borderRadius: BorderRadius.circular(50)
-              //   topLeft: Radius.circular(50),
-              //   topRight: Radius.circular(50),
-              // ),
-            ),
+                color: Color.fromARGB(219, 231, 255, 224),
+                borderRadius: BorderRadius.circular(50)
+                //   topLeft: Radius.circular(50),
+                //   topRight: Radius.circular(50),
+                // ),
+                ),
             child: Form(
               key: _formkey,
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
                     'Login',
@@ -51,6 +51,7 @@ class login_screen extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.7,
                     child: TextFormField(
+                      controller: userName,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "*Please enter Your username";
@@ -77,7 +78,6 @@ class login_screen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(
                     height: 5,
                   ),
@@ -88,8 +88,8 @@ class login_screen extends StatelessWidget {
                         if (value!.isEmpty) {
                           return "*Please enter Your email";
                         }
-                        final regex = RegExp(
-                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$');
+                        final regex =
+                            RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$');
                         if (!regex.hasMatch(value)) {
                           return "Please enter a valid email";
                         }
@@ -192,7 +192,11 @@ class login_screen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Icon(Icons.fingerprint, color: Colors.blue, size: 45,),
+                  const Icon(
+                    Icons.fingerprint,
+                    color: Colors.blue,
+                    size: 45,
+                  ),
                   // Image.asset(
                   //   'images/finger.png',
                   //   height: MediaQuery.of(context).size.height * 0.09,
