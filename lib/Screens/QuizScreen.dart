@@ -11,7 +11,18 @@ class QuizScreen extends StatefulWidget {
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends State<QuizScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _slideAnswersController;
+
+  @override
+  void initState() {
+    super.initState();
+    _slideAnswersController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 4));
+    _slideAnswersController.forward();
+  }
+
   int index = 0;
   int score = 0;
 
@@ -94,38 +105,44 @@ class _QuizScreenState extends State<QuizScreen> {
                     (widget.categoryMap["data"][index]["answers"] as List)
                         .length;
                 i++)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.categoryMap["color"],
-                    elevation: 10,
-                  ),
-                  onPressed: () {
+              SlideTransition(
+                position: Tween<Offset>(
+                        begin: const Offset(0, 1), end: const Offset(0, 0))
+                    .animate(_slideAnswersController),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: widget.categoryMap["color"],
+                      elevation: 10,
+                    ),
+                    onPressed: () {
+                      score += widget.categoryMap["data"][index]["answers"][i]
+                          ["Score"] as int;
 
-                    score += widget.categoryMap["data"][index]["answers"][i]["Score"] as int;
-
-                    if (index + 1 <
-                        (widget.categoryMap["data"] as List).length) {
-                      setState(() {
-                        
-                        index++;
-                      });
-                    } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) =>
-                              Score_screen(score: score, totalNumOfQuestions: index + 1 ,),
-                        ),
-                      );
-                    }
-                  },
-                  child: Center(
-                    child: Text(
-                      widget.categoryMap['data'][index]["answers"][i]["ans"],
-                      style: GoogleFonts.pacifico(
-                          fontSize: 20, color: Colors.black),
+                      if (index + 1 <
+                          (widget.categoryMap["data"] as List).length) {
+                        setState(() {
+                          index++;
+                        });
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => Score_screen(
+                              score: score,
+                              totalNumOfQuestions: index + 1,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: Center(
+                      child: Text(
+                        widget.categoryMap['data'][index]["answers"][i]["ans"],
+                        style: GoogleFonts.pacifico(
+                            fontSize: 20, color: Colors.black),
+                      ),
                     ),
                   ),
                 ),

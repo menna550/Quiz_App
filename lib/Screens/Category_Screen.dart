@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Widgets/category_container.dart';
+import 'package:shimmer/shimmer.dart';
 import 'dart:html' as html;
 
 class CategoryScreen extends StatelessWidget {
@@ -14,6 +15,7 @@ class CategoryScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         leading: BackButton(
+          color: Colors.purple,
           onPressed: () {
             showDialog(
               context: context,
